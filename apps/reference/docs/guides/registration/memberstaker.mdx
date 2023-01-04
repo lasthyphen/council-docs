@@ -1,0 +1,120 @@
+---
+id: memberstaker
+title: 'Staking DJTX'
+description: An HTTP Client for PostgreSQL Functions.
+---
+
+# What Is Staking?
+
+Staking is the process of locking up DJTX coins to support a network while receiving
+a reward in return. These rewards vary depending upon the staker and staking purpose.
+
+For instance, Council Members stake a set amount of DJTX as a requirement for the duration of their council term. 
+In return the rewards they receive are in the forms of monetary compensation, increased network utility & governance contribution.
+
+## Staking Parameters on Dijets Network
+
+When a validator is done validating it receives back the DJTX coins that were staked. The validator also receives a reward for helping
+to secure the network provided the validating node was sufficiently responsive and correct during the time it validates.
+
+:::caution
+
+Staking rewards are sent to the nominated wallet address at the end of the staking term
+**as long as all of these parameters are met**.
+
+:::
+
+### Mainnet
+
+- The set amount that each Council Member must stake is 25,000 DJTX for 1 year or the council's term.
+- The minimum amount that a validator must stake is 2,000 DJTX
+- The minimum amount that a delegator must delegate is 25 DJTX
+- The minimum amount of time one can stake funds for validation is 2 weeks
+- The maximum amount of time one can stake funds for validation is 1 year
+- The minimum amount of time one can stake funds for delegation is 2 weeks
+- The maximum amount of time one can stake funds for delegation is 1 year
+- The minimum delegation fee rate is 2%
+- The maximum weight of a validator (their own stake + stake delegated to them)
+  is the minimum of 3 million DJTX and 5 times the amount the validator staked.
+  For example, if you staked 2,000 DJTX to become a validator, only 8000 DJTX
+  can be delegated to your node in total.
+
+A validator will receive a staking reward if they are online and responsive for
+more than 80% of their validation period, as measured by a majority of
+validators, weighted by stake. 
+
+A Council Member validating must always aim for its validating node to be online, accurate and responsive 100% of the time.
+
+If your reported uptime is not close to 100%, there may be something wrong with
+your node setup, which may jeopardize your membership. If this is the case, contact us on
+[Qowalts](https://redirect.dijets.io/#/#dijets-support:dijets.org) so we can help you find the issue.
+
+## Validators
+
+**Validators** secure Dijets Primary Network and its Child Chains, create new blocks, azimuth indices and process
+transactions. To achieve consensus, validators repeatedly sample each other. The
+probability that a given validator is sampled is proportional to its stake.
+
+When you add a node to the validator set, you specify:
+
+- Your node’s ID
+- When you want to start and stop validating
+- How many DJTX you are staking (For Council Members this amount is 25,000 DJTX)
+- The address to send any rewards to
+- Your delegation fee rate (For Council Members this must be set at 1.33%)
+
+## Delegators
+
+A delegator is a DJTX holder, who wants to participate in staking, but chooses
+to trust an existing validating node through delegation.
+
+When you delegate stake to a validator, you specify:
+
+- The ID of the node you’re delegating to
+- When you want to start/stop delegating stake (must be while the validator is validating)
+- How many DJTX you are staking
+- The address to send any rewards to
+
+:::info
+The minimum amount that a delegator must delegate is 25 DJTX.
+:::
+
+# Validator Stake for Council Members
+
+You should have already completed your Dijets Node setup requirement to follow the staking process below.
+
+Have your NodeID at hand. This is the ID that was generated when you first built and started Dijets Node.
+
+Ensure 25,000 DJTX balance in your Method Chain. 
+
+:::info 
+
+You can only submit your stake if you have DJTX on Method Chain. Alternatively you can make an intra-chain transfer to have the required DJTX balance in the Method Chain.
+
+:::
+
+1. To confirm the NodeID for the validator's stake, restart your Dijets Node.
+
+<video width="99%" muted playsInline controls="true">
+  <source
+    src="/docs/videos/nodeid.mp4"
+    type="video/mp4"
+    muted
+    playsInline
+  />
+</video>
+
+1. Log into your wallet using the Singleton Wallet address you generated. Make sure the wallet has 25,000 DJTX coins on Method Chain.
+
+1. Fill out the form with Staking details and submit the transaction.
+
+<video width="99%" muted playsInline controls="true">
+  <source
+    src="/docs/videos/staking-validator.mp4"
+    type="video/mp4"
+    muted
+    playsInline
+  />
+</video>
+
+

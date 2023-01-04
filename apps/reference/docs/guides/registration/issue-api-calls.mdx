@@ -1,0 +1,177 @@
+---
+id: issue-api-calls
+title: 'Issue API Calls to Dijets Node'
+description: An HTTP Client for PostgreSQL Functions.
+---
+
+# Issuing API Calls
+
+This reference doc explains how to make calls to APIs exposed by Dijets Network nodes.
+
+## Endpoints
+
+An API call is always made to an:
+
+`endpoint` which essentially is just another word for a URL.
+
+The main difference between the common URLs and an endpoint URL is in its composition.
+
+An Endpoint is mainly made up of:
+
+`base URI` which is the address of the server system host
+
+`port` which is the port number exposed on the address; and lastly
+
+`path` which is the absolute path address on the host serving the endpoint URL
+
+### Base URL
+
+The base of the URL is always:
+
+`[server-ip] / [node-ip]:[http-port]`
+
+- `node-ip` is the IP address of the node the call is made to.
+- `http-port` is the port the node listens on for HTTP calls. 
+
+All Dijets Nodes listen to port: 9650 by default.
+
+For example, if you're making RPC calls on a locally running node, the base URL might look something like this: `127.0.0.1:9650`.
+
+If you're making RPC calls to remote cloud based nodes, then instead of `127.0.0.1` you
+should use the public IP of the server where the node is.
+
+:::note
+Dijets Node will only accept API calls on the local interface by default. You can override this default setting by
+specifying `http-host` flag when starting Dijets Node
+:::
+
+:::caution 
+
+Do not leave the
+`http-port` accessible to everyone! Malicious actors will often scan for
+nodes that have unrestricted access to their RPC port so they can spam them with resource-intensive queries
+forcing the network to go offline.
+
+:::
+
+## Primary Dijets Network and Child Chain RPC calls
+
+Besides the local primary APIs, the Dijets node will
+also expose endpoints to establish communication with specific chains that are either part of
+the Main Dijets Network i.e Value, Utility and Method Chains, or part of any Child Chains or Enterprise Consortia chains that the node
+might also be validating or synchronising with.
+
+In general, such endpoints are always formatted as:
+
+```sh
+http://127.0.0.1:9650/ext/bc/[blockhainID]
+```
+
+### Primary Dijets Network Endpoints
+
+The Primary Network consists of the Value, Utility & Method Chain. These three chains are omnipresent in all Dijets Nodes hence they can 
+easily be defined using an alias instead of the long chain ID that each blockchain gets assigned upon its creation. 
+Using these aliases the three main chains of Dijets Network have the following endpoints:
+
+```sh
+http://127.0.0.1:9650/ext/bc/X for Value Chain
+http://127.0.0.1:9650/ext/bc/P for Method Chain
+http://127.0.0.1:9650/ext/bc/C for Utility Chain
+```
+
+### Utility Chain and EVM-specific Endpoints
+
+Dijets Utility Chain exposes its
+own set of endpoints, accessible with JSON-RPC, and Websocket.
+
+#### JSON-RPC EVM Endpoints
+
+To interact with Dijets Utility Chain via the JSON-RPC use the endpoint:
+
+```sh
+http://127.0.0.1:9650/ext/bc/ext/bc/C/rpc
+```
+
+Businesses or Organisations running an Enterprise Consortia chain on Dijets can access their instance of the EVM via the JSON-RPC endpoint:
+
+```sh
+http://127.0.0.1:9650/ext/bc/[blockchainID]/rpc
+```
+
+where `blockchainID` is the ID of the blockchain running the EVM.
+
+
+#### Websocket EVM Endpoints
+
+To interact with Dijets Utility Chain via the websocket endpoint, use:
+
+```sh
+http://127.0.0.1:9650/ext/bc/C/ws
+```
+
+To interact with other instances of the EVM via the websocket endpoint:
+
+```sh
+http://127.0.0.1:9650/ext/bc/blockchainID/ws
+```
+
+where `blockchainID` is the ID of the respective blockchain. For example,
+to interact with Dijets Utility Chain's Ethereum APIs via websocket you can
+use:
+
+```sh
+ws://127.0.0.1:9650/ext/bc/C/ws
+```
+
+:::info 
+Use `https://` or `wss://` instead of `http://` or `ws://` when making calls to Dijets Public API server.
+:::
+
+## Breakdown of a JSON RPC Request
+
+Most of Dijets Node APIs use the standard [JSON RPC
+2.0](https://www.jsonrpc.org/specification) format for making its requests
+and responses. Here's a breakdown of a JSON RPC request
+
+- `jsonrpc` specifies the version of the JSON RPC protocol. (In practice is always 2.0)
+- `method` specifies the service and method that we want to invoke.
+- `params` specifies the arguments to the method.
+- `id` is the ID of this request. Request IDs should be unique.
+
+### JSON RPC Success Response
+
+Each successfully made request call - whether it's made to a locally or remotely running Dijets Node or its Public Server API - will look like this:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "Status": "Accepted"
+  },
+  "id": 1
+}
+```
+
+- `id` is the ID of the request that this response corresponds to.
+- `result` is the returned values.
+
+### JSON RPC Error Response
+
+If the API method invoked returns an error then the response will have a field
+`error` in place of `result`. Additionally, there is an extra field, `data`,
+which holds additional information about the error that occurred.
+
+Such a response would look like:
+
+```json
+{
+    "jsonrpc": "2.0",
+    "error": {
+        "code": -32600,
+        "message": "[The error message goes here]",
+        "data": [Any additional information about the error goes into this object]
+    },
+    "id": 1
+}
+```
+Now that you have learnt how to make API Calls to a Dijets Node, lets go ahead and make a few calls to generate a singleton wallet which is one of the requirements for Dijets Council Membership.

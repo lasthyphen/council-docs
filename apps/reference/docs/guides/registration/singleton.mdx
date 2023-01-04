@@ -1,0 +1,150 @@
+---
+id: singleton
+title: 'Generate a Singleton Wallet'
+description: An HTTP Client for PostgreSQL Functions.
+---
+
+### Dijets Wallet Addresses
+
+A new address is created by Dijets wallet after each confirmed transaction or deposit. 
+This is mainly done for privacy reasons so a third party doesn’t see all of your DJTX in one address. 
+
+:::note
+
+Although Dijets Wallet creates a new address after each new transaction occurs, all of the addresses 
+continue to link to the same wallet. Which means that you can continue to use your old wallet address for receiving DJTX
+
+:::
+
+Radical transparency is one of the foundations to Dijets Governance Mechanism. Whereas each Council Member's actions, choices, votes, delegations etc are all recorded on-chain for the duration of their term.
+The Council Member is thus required to obtain a Singleton Wallet address which remains unchanged. In doing so, each registered wallet address can then quickly traced back to its respective private key holding council member.
+
+
+# Dijets keystore API
+
+In the previous section we learnt about issuing API calls to Dijets Node. We will use the same API methods to generate a singleton wallet.
+
+Each Node in Dijets Network has a built-in keystore to generate wallet addresses from. Clients create users essentially by registering an address within this keystore. These addresses can then act as identities to
+be used when interacting with blockchains. Note that this keystore exists only at the node level, so if you create a
+user on a node'A' it exists _only_ in node'A'. However, users can be imported and exported into other Nodes using the same keystore
+API.
+
+:::info
+
+This API set is specifically aimed at a presumed Node that the Council Member has already setup and is running.
+
+:::
+
+## Format
+
+This API uses the `json 2.0` API format like most other Dijets Node APIs.
+
+
+# Instructions
+
+#### For MacOS running upwards of 10.15 Catalina:
+
+Press Command ⌘ and Spacebar to bring up the Spotlight. Then type in the word “Terminal” (without the
+quotation marks).
+
+Select Terminal from the list and wait for the terminal window to open up.
+
+Paste the following command:
+
+```
+curl -X POST --data '{
+    "jsonrpc": "2.0",
+    "method": "avm.createAddress",
+    "params": {
+        "username":"DGC001",
+        "password":"DjtxV!rT6c"
+    },
+    "id": 1
+}' -H 'content-type:application/json;' https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/X
+```
+
+
+
+#### For Windows OS:
+
+Invoke curl.exe from a command window.
+
+Click Start > Run and then type `cmd` in the Run dialog box.
+
+Look for the Command Prompt, right click and select "Run as administrator"
+
+Wait for the Command Prompt window to open and Paste the following command
+
+```
+curl -X POST --data '{
+    "jsonrpc": "2.0",
+    "method": "avm.createAddress",
+    "params": {
+        "username":"DGC001",
+        "password":"DjtxV!rT6c"
+    },
+    "id": 1
+}' -H 'content-type:application/json;' https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/X
+```
+If the call was made successfully then you should see an output as a response with a newly generated Dijets Address:
+
+```
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "address": "X-dijets1xcprqajsw6gtfsvlh9x5rdlmqolrgkmns2fqr2r0"
+  },
+  "id": 1
+}
+```
+
+Note down the address and go ahead and run the second `curl` command
+
+```
+curl -X POST --data '{
+    "jsonrpc":"2.0",
+    "id"     :1,
+    "method" :"avm.exportKey",
+    "params" :{
+        "username":"DGC001",
+        "password":"DjtxV!rT6c",
+        "address":"X-dijets1xcprqajsw6gtfsvlh9x5rdlmqolrgkmns2fqr2r0"
+    }
+}' -H 'content-type:application/json;' https://dijets.ukwest.cloudapp.azure.com:443/ext/bc/X
+```
+We use the same username and password as the first command and in the address param, we added the address generated in the previous step.
+
+If the call was made successfully then you should see an output as a response, this time with a PrivateKey associated with the address you generated with the first command.
+
+```
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "result": {
+    "privateKey": "PrivateKey-2w1XiXxPfQL4TypYqnohRL8DJNTz9cGiGmwQ1zmgEqD9c9KWLq"
+  }
+}
+```
+
+<video width="99%" muted playsInline controls="true">
+  <source
+    src="/docs/videos/singleton-address.mp4"
+    type="video/mp4"
+    muted
+    playsInline
+  />
+</video>
+
+:::caution
+Never give out your PrivateKey to anyone. Keep the Private Key in a safe place. Anyone with your PrivateKey can steal your funds and a if you lose your Private Key, then there is no way to recover your account or funds
+:::
+
+## Singleton Wallet Address
+
+The address you generated with the commands above is a Singleton Wallet address. Which means that this address will not change like an address generated with a mnemonic phrase does.
+
+
+## Next Step
+
+Now that you have generated a singleton wallet address, you can use the generated Private Key to log into [Dijets Wallet](https://wallet.dijets.io) and stake your 25K DJTX to complete the Council Membership registration.
+

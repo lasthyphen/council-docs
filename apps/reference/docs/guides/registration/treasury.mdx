@@ -1,0 +1,20 @@
+---
+id: treasury
+title: 'DIP Template'
+description: An HTTP Client for PostgreSQL Functions.
+---
+
+DGC Treasury is the pool of funds made available to the Council for the duration of its term for the perusal of DIPs that were unanimously passed by the voting council.
+
+# Treasury Wallet
+
+DGC Treasury is a Multisig smart contract wallet with multiple ownership policies baked into its functionality on Dijets Network. Each member of the Core Governance Council holds the multi signatory key to the wallet.
+The wallet requires an authentication confirmation by each of the council member before a function call is submitted to HAL for execution.
+
+Each Amber and Green DIP that calls for payment(s) from the treasury must have the "Transactions" container filled out by the council member proposing the 'Vote Pending' phase progression of the DIP. DIPs that target the Treasury wallet have additional information fields like transaction type, Asset, recipient address, and amount.
+
+Once the voting closes, and the majority consent has been reached, any one of the council member can use the "Request execution" function to submit to HAL -- this is an on-chain transaction that initializes HAL for its execution.
+
+Once the request has been submitted to HAL there is an additional 72 hour period of time between the proposal resolution and HAL's ability to execute the underlying transaction -- this is also known as the Timelock. 
+
+During the Timelock period, Dijets Core Team has the ability to veto malicious transactions. 
